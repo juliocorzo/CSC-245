@@ -1,0 +1,103 @@
+# Project 4 README
+## CSC245 - Spring 2019 - Julio R. Corzo
+
+### Problem Description
+The purpose of this assignment is to implement a client file using the Graph
+class to determine the shortest path from a vertex using Dijkstra's Algorithm.
+
+#### Problems
+To simplify, the problems that this program seeks to achieve are:
+
+1. Correctly getting input from a file and using that input to build a directed
+graph using the Graph class.
+2. Using the graph object that was created to find the shortest path from a
+vertex by coding our own version of Dijkstra's algorithm. Outputting the final
+table for the user to see the shortest path.
+
+Additionally, for extra credit, determine if the graph has a cycle and printing
+the steps of this cycle. I don't think I will implement this unless I find some
+downtime.
+
+### Preliminary Analysis
+Completing this assignment will require several steps, and I only plan on pro-
+ceeding to the next step until I have successfully implemented the first one.
+I will be adding notes of the exact steps that I took here while coding.
+
+These steps will be:
+1. Verifying that a file is passed correctly, if it isn't, indicate that the
+file was not passed correctly and exit.
+2. Build the graph based on the input that was provided. This requires several
+steps by itself, which are:
+  1. Parsing through each line of the input the get the edges, then saving
+  those edges into structs that I will be naming `Flights`. These structs will
+  have three variables, a string for origin, a string for destination, and a
+  int for distance (known as weight in the Graph class.)
+  2. Find all the unique vertices. I ran into problems while doing this because
+  sometimes the origin does not include all the edges. I solved this by imple-
+  menting a temporary string vector that stores all the unique edges taken
+  methodically from the edge's origins, then from the destinations. Parsing
+  through both origin and destinations was necessary to avoid overflow errors.
+  3. Get the edge count by getting the final size of the edge vector.
+  4. After getting all the vectors, I sorted them alphabetically.
+  5. Finally, the vertices were added to the graph, as well as my own struct
+  that I used to keep track of the vectors.
+  6. Once the vectors are added, I added all the edges, which were recovered
+  from the `Flights` vector from step 1 used to temporarily store them.
+3. Implement Djikstra's algorithm using the graph that was created on step 2.
+Doing so will take several steps, which are:
+  1. Getting the starting vector from the user, while verifying that it is a
+  valid vector before accepting it.
+  2. Once a valid vector has been found, we find index where this vector is in
+  from the VertexType vector containing all the vectors. This was created in
+  step 2.
+  3. Once the index is found, we need to mark this vector, which is done both
+  in the graph and in the VertexType vector. Graph method `MarkVertex()` is
+  used in this step.
+  4. Printing the table header and the starting vertex row, printing it requi-
+  res that I implement a method for printing rows.
+  5. Parsing through  the graph. This is the part where I spent the most time  
+  coding.
+  6. Once all the vertices have been marked or a dead end has been found, the
+  algorithm ends.
+
+---
+
+### Graph class
+This is the primary class used for completing this assignment. It is implemen-
+ted with arrays. After some consideration, I decided to pass strings to it,
+and focus on managing the vertices on the client file.
+
+After creating an object of class Graph, it is important to pass it all the
+vertices that we have gotten from the input file. Only then can we pass the
+edges, since vertices' edges are populated while using the AddEdge method.
+
+#### Methods
+##### Setters
+1. `MakeEmpty()` clears the graph.
+2. `AddVertex(VertexType)` adds a vertex to the graph.
+3. `AddEdge(VertexType, VertexType, int)` adds an edge. The parameters that
+are passed to it represent the origin, the destination, and the weight.
+4. `GoToVertices(VertexType, Queue<VertexType>&)` adds vertices to the queue
+which are connected to the edge passed as the first parameter. If no adjacent
+vertices are found, the queue is not modified. It is important to add some error
+handling to the client file in the case that there are no adjacent vertices.
+5. `ClearMarks()` clears all marked edges.
+6. `MarkVertex(VertexType)` marks the passed vertex as already visited.
+
+##### Getters
+1. `IsEmpty()` returns a boolean value, true if the Graph has no values.
+2. `IsFull()` returns a boolean value, true if the Graph is full.
+3. `WeightIs(VertexType, VertexType)` returns the weight of a particular edge,
+the origin and the destination are the parameters passed in that order.
+4. `IsMarked(VertexType)` returns true if the vertex is marked.
+
+As mentioned in the project handout, I won't be using all of these methods.
+
+---
+
+### Error Handling Checklist
+
+[DONE]  Proper error message is sent when no file is passed.
+[DONE]  Proper error message is sent when more than one file is passed.
+[DONE]  Proper error message is send when the file passed is not good.
+[DONE]  Program asks for starting vertex until proper vertex is passed.

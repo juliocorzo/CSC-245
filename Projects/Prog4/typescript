@@ -1,0 +1,119 @@
+Script started on Thu 18 Apr 2019 01:03:25 AM EDT
+]0;corzo_jr@cobra:~/CSC245/Projects/Prog4[?1034h[corzo_jr@cobra Prog4]$ g++ -o dijkstra dijkstra.cpp
+]0;corzo_jr@cobra:~/CSC245/Projects/Prog4[corzo_jr@cobra Prog4]$ dijkstra
+The command line inputs were not correct.
+Please try again.
+]0;corzo_jr@cobra:~/CSC245/Projects/Prog4[corzo_jr@cobra Prog4]$ dijkstra more than one input
+The command line inputs were not correct.
+Please try again.
+]0;corzo_jr@cobra:~/CSC245/Projects/Prog4[corzo_jr@cobra Prog4]$ dijkstra invalidiinput
+The command line inputs were not correct.
+Please try again.
+]0;corzo_jr@cobra:~/CSC245/Projects/Prog4[corzo_jr@cobra Prog4]$ dijkstra giinf[K[K[Knfiile[K[K[K;e[K[Kle.dat1.dat
+
+        ^^^^^^^^^^^^^^^^    DIJKSTRA'S ALGORITHM    ^^^^^^^^^^^^^^^^
+
+        A weighted graph has been built for these 7 cities: 
+
+                   Atlanta            Austin           Chicago
+                    Dallas            Denver           Houston
+                Washington
+
+        Please input your starting vertex: Washington
+
+        ------------------------------------------------------------
+
+                    Vertex          Distance         Previous
+
+                Washington                 0               N/A
+                   Atlanta               600        Washington
+                    Dallas              1300        Washington
+                   Houston              1400           Atlanta
+                    Austin              1500            Dallas
+                    Denver              2080            Dallas
+                   Chicago              2200            Dallas
+
+]0;corzo_jr@cobra:~/CSC245/Projects/Prog4[corzo_jr@cobra Prog4]$ dijkstra ginfile2.dat
+
+        ^^^^^^^^^^^^^^^^    DIJKSTRA'S ALGORITHM    ^^^^^^^^^^^^^^^^
+
+        A weighted graph has been built for these 7 cities: 
+
+                        V1                V2                V3
+                        V4                V5                V6
+                        V7
+
+        Please input your starting vertex: V6
+
+        ------------------------------------------------------------
+
+                    Vertex          Distance         Previous
+
+                        V6                 0               N/A
+                        V1       Not on path               N/A
+                        V2       Not on path               N/A
+                        V3       Not on path               N/A
+                        V4       Not on path               N/A
+                        V5       Not on path               N/A
+                        V7       Not on path               N/A
+
+]0;corzo_jr@cobra:~/CSC245/Projects/Prog4[corzo_jr@cobra Prog4]$ dijkstra ginfile3.dat
+
+        ^^^^^^^^^^^^^^^^    DIJKSTRA'S ALGORITHM    ^^^^^^^^^^^^^^^^
+
+        A weighted graph has been built for these 12 cities: 
+
+                    Athens           Atlanta           Augusta
+                    Baxley           Conyers    Ft. Oglethorpe
+                     Macon          Norcross          Savannah
+                   Suwanee          Valdosta     Warner Robins
+
+
+        Please input your starting vertex: Fake City
+        Input was invalid, please enter starting vertex: Ft. Oglethorpe
+
+        ------------------------------------------------------------
+
+                    Vertex          Distance         Previous
+
+            Ft. Oglethorpe                 0               N/A
+                   Atlanta               110    Ft. Oglethorpe
+                   Conyers               130           Atlanta
+                  Norcross               130           Atlanta
+                   Suwanee               140           Atlanta
+                    Athens               180           Atlanta
+                     Macon               190           Atlanta
+             Warner Robins               210             Macon
+                   Augusta               250           Atlanta
+                    Baxley               310             Macon
+                  Valdosta               340             Macon
+                  Savannah               350             Macon
+
+]0;corzo_jr@cobra:~/CSC245/Projects/Prog4[corzo_jr@cobra Prog4]$ gi[K[Kdijkstra ginfile4.dat
+
+        ^^^^^^^^^^^^^^^^    DIJKSTRA'S ALGORITHM    ^^^^^^^^^^^^^^^^
+
+        A weighted graph has been built for these 7 cities: 
+
+                         1                 2                 3
+                         4                 6                 7
+                         8
+
+        Please input your starting vertex: 1
+
+        ------------------------------------------------------------
+
+                    Vertex          Distance         Previous
+
+                         1                 0               N/A
+                         2                 1                 1
+                         3                 1                 1
+                         4                 2                 2
+                         6       Not on path               N/A
+                         7       Not on path               N/A
+                         8       Not on path               N/A
+
+]0;corzo_jr@cobra:~/CSC245/Projects/Prog4[corzo_jr@cobra Prog4]$ exit
+exit
+
+Script done on Thu 18 Apr 2019 01:05:33 AM EDT

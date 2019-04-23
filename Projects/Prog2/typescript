@@ -1,0 +1,454 @@
+Script started on Mon 18 Feb 2019 04:28:11 PM EST
+]0;corzo_jr@cobra:~/CSC245/Projects/Prog2[?1034h[corzo_jr@cobra Prog2]$ exita.outc++ dc.cppat -n dc.cpp 
+     1	#pragma clang diagnostic push
+     2	#pragma ide diagnostic ignored "cert-err34-c"
+     3	#include <iostream>
+     4	#include <stdlib.h>
+     5	#include <stdio.h>
+     6	#include <cmath>
+     7	#include "stack.h"
+     8	using namespace std;
+     9	
+    10	void printTop(const Stack<double> &s);
+    11	void printAndPopTop(Stack<double>& s);
+    12	void printAll(Stack<double> s);
+    13	void makeEmpty(Stack<double>& s);
+    14	void duplicateTop(Stack<double>& s, int& total);
+    15	void swapTop(Stack<double>& s);
+    16	void help();
+    17	string yellowText(const string &m);
+    18	
+    19	void getInput(string& i);
+    20	void populate(Stack<double>& s, string i, int& total);
+    21	void operate(Stack<double>& s, char o);
+    22	bool isOperator(char o);
+    23	bool isCommand(char c);
+    24	bool isAnythingElse(char r);
+    25	
+    26	void checkSize(Stack<double>& s, int& t);
+    27	
+    28	void err(char t, const string &m);
+    29	string redText(const string &m);
+    30	
+    31	int main() {
+    32	    Stack<double> s;
+    33	    string i;
+    34	    int t = 10;
+    35	    while(true) {
+    36	        getInput(i);
+    37	        populate(s, i, t);
+    38	    }
+    39	}
+    40	
+    41	void getInput(string& i) {
+    42	    cout << "\033[0;32m"; getline(cin, i); cout << "\033[0m";
+    43	}
+    44	
+    45	void checkSize(Stack<double>&s, int& t) {
+    46	    try {
+    47	        if(s.isFull()) throw Overflow(1);
+    48	    }
+    49	    catch(Overflow& e) {
+    50	        if(t == 10) {
+    51	            err(e.type, e.explanation);
+    52	        }
+    53	        double ta[t];
+    54	        Stack<double> ts(t * 2);
+    55	        int pos = 0;
+    56	        while(pos < t) {
+    57	            ta[pos] = s.topAndPop();
+    58	            pos++;
+    59	        }
+    60	        while(pos > 0) {
+    61	            ts.push(ta[pos - 1]);
+    62	            pos--;
+    63	        }
+    64	        s = ts;
+    65	        t *= 2;
+    66	    }
+    67	}
+    68	
+    69	void printTop(const Stack<double> &s) {
+    70	    try {
+    71	        if(s.isEmpty()) throw Underflow(1);
+    72	        cout << s.top() << endl;
+    73	    }
+    74	    catch(Underflow& e) {
+    75	        err(e.type, e.explanation);
+    76	    }
+    77	}
+    78	
+    79	void printAndPopTop(Stack<double>& s) {
+    80	    try {
+    81	        if(s.isEmpty()) throw Underflow(2);
+    82	        cout << s.top() << " "; s.pop();
+    83	    }
+    84	    catch(Underflow& e) {
+    85	        err(e.type, e.explanation);
+    86	    }
+    87	}
+    88	
+    89	void printAll(Stack<double> s) {
+    90	    try {
+    91	        if(s.isEmpty()) throw Underflow(3);
+    92	        cout << s.topAndPop() << endl;
+    93	        while(!s.isEmpty()) {
+    94	            cout << s.topAndPop() << endl;
+    95	        }
+    96	    }
+    97	    catch(Underflow& e) {
+    98	        err(e.type, e.explanation);
+    99	    }
+   100	}
+   101	
+   102	void makeEmpty(Stack<double>& s) {
+   103	    try {
+   104	        if(s.isEmpty()) throw Underflow(4);
+   105	        Stack<double> ts;
+   106	        s = ts;
+   107	    }
+   108	    catch(Underflow& e) {
+   109	        err(e.type, e.explanation);
+   110	    }
+   111	}
+   112	
+   113	void duplicateTop(Stack<double>& s, int& total) {
+   114	    try {
+   115	        if(s.isEmpty()) throw Underflow(5);
+   116	        checkSize(s, total);
+   117	        s.push(s.top());
+   118	    }
+   119	    catch(Underflow& e) {
+   120	        err(e.type, e.explanation);
+   121	    }
+   122	}
+   123	
+   124	void swapTop(Stack<double>& s) {
+   125	    double tempA = 0, a = 0, b = 0;
+   126	    bool aValid = true;
+   127	    bool bValid = true;
+   128	    try {
+   129	        if(s.isEmpty()) throw Underflow(6);
+   130	        tempA = s.top();
+   131	        a = s.topAndPop();
+   132	    }
+   133	    catch(Underflow& e) {
+   134	        aValid = false;
+   135	        err(e.type, e.explanation);
+   136	    }
+   137	    try {
+   138	        if(aValid) {
+   139	            if(s.isEmpty()) throw Underflow(7);
+   140	            b = s.topAndPop();
+   141	        }
+   142	    }
+   143	    catch(Underflow& e) {
+   144	        bValid = false;
+   145	        err(e.type, e.explanation);
+   146	    }
+   147	    if(aValid && bValid) {
+   148	        s.push(a);
+   149	        s.push(b);
+   150	    }
+   151	    if(aValid && !bValid) {
+   152	        s.push(tempA);
+   153	    }
+   154	}
+   155	
+   156	void help() {
+   157	    cout << "\nThe available commands are: \n";
+   158	    cout << yellowText("p") << "\t Returns the top of the stack." << endl;
+   159	    cout << yellowText("n") << "\t Prints the top of the stack then pops it." << endl;
+   160	    cout << yellowText("f") << "\t Prints the stack." << endl;
+   161	    cout << yellowText("c") << "\t Clears the stack." << endl;
+   162	    cout << yellowText("d") << "\t Pushes the top of the stack unto the stack" << endl;
+   163	    cout << yellowText("r") << "\t Swaps the two numbers at the top of the stack." << endl;
+   164	    cout << yellowText("h") << "\t Prints a list of possible commands." << endl;
+   165	    cout << yellowText("e") << "\t Quits the program \n" << endl;
+   166	}
+   167	
+   168	void operate(Stack<double>& s, char o) {
+   169	    double tempA = 0, tempB = 0, a = 0, b = 0, c = 0;
+   170	    bool aValid = true;
+   171	    bool bValid = true;
+   172	    bool valid = true;
+   173	    try {
+   174	        if(s.isEmpty()) throw Underflow(8);
+   175	        tempA = s.top();
+   176	        a = s.topAndPop();
+   177	    }
+   178	    catch(Underflow& e) {
+   179	        aValid = false;
+   180	        err(e.type, e.explanation);
+   181	    }
+   182	    try {
+   183	        if(aValid) {
+   184	            if(s.isEmpty()) throw Underflow(9);
+   185	            tempB = s.top();
+   186	            b = s.topAndPop();
+   187	        }
+   188	    }
+   189	    catch(Underflow& e) {
+   190	        bValid = false;
+   191	        err(e.type, e.explanation);
+   192	    }
+   193	    switch(o) {
+   194	        case '+': c = a + b; break;
+   195	        case '-': c = b - a; break;
+   196	        case '*': c = a * b; break;
+   197	        case '/':
+   198	            try {
+   199	                if(a == 0) throw DivisionByZero(1);
+   200	                else {
+   201	                    c = b / a; break;
+   202	                }
+   203	            }
+   204	            catch(DivisionByZero& e) {
+   205	                valid = false;
+   206	                err(e.type, e.explanation);
+   207	                break;
+   208	            }
+   209	        case '%':
+   210	            try {
+   211	                if(a == 0) throw DivisionByZero(2);
+   212	                else {
+   213	                    c = fmod(b, a); break;
+   214	                }
+   215	            }
+   216	            catch(DivisionByZero& e) {
+   217	                valid = false;
+   218	                err(e.type, e.explanation);
+   219	                break;
+   220	            }
+   221	        default: break;
+   222	    }
+   223	    if(aValid && bValid && valid) {
+   224	        s.push(c);
+   225	    }
+   226	    if(!bValid) {
+   227	        s.push(tempA);
+   228	    }
+   229	    if(aValid && bValid && !valid) {
+   230	        s.push(tempB);
+   231	        s.push(tempA);
+   232	    }
+   233	}
+   234	
+   235	void populate(Stack<double>& s, string i, int& total) {
+   236	    int pos = 0;
+   237	    while(i[pos] != '\0') {
+   238	        if(i[pos] == ' ') pos++;
+   239	        if(isdigit(i[pos]) || (i[pos] == '.' && isdigit(i[pos + 1]))) {
+   240	            bool point = false;
+   241	            string t;
+   242	            while((isdigit(i[pos]) || i[pos] == '.') && !point) {
+   243	                if(i[pos] == '.') point = true;
+   244	                t.append(string(1, i[pos]));
+   245	                pos++;
+   246	            }
+   247	            while(isdigit(i[pos])) {
+   248	                t.append(string(1, i[pos]));
+   249	                pos++;
+   250	            }
+   251	            checkSize(s, total);
+   252	            const char* p = t.c_str(); char* end;
+   253	            double td = strtod(p, &end);
+   254	            s.push(td);
+   255	        }
+   256	        if(i[pos] == '_') {
+   257	            bool valid = true;
+   258	            bool point = false;
+   259	            string t;
+   260	            pos++;
+   261	            while(i[pos] == '_') {
+   262	                pos++;
+   263	            }
+   264	            if(i[pos] == '.') {
+   265	                t.append(string(1, i[pos]));
+   266	                pos++;
+   267	            }
+   268	            try {
+   269	                if(!isdigit(i[pos]) && !point) throw DataError(1);
+   270	            }
+   271	            catch(DataError& e) {
+   272	                valid = false;
+   273	                err(e.type, e.explanation);
+   274	            }
+   275	            while((isdigit(i[pos]) || i[pos] == '.') && !point) {
+   276	                if(i[pos] == '.') point = true;
+   277	                t.append(string(1, i[pos]));
+   278	                pos++;
+   279	            }
+   280	            while(isdigit(i[pos])) {
+   281	                t.append(string(1, i[pos]));
+   282	                pos++;
+   283	            }
+   284	            if(valid) {
+   285	                const char* p = t.c_str(); char* end;
+   286	                double td = strtod(p, &end) * -1.0;
+   287	                if(td == -0) td*=-1;
+   288	                s.push(td);
+   289	            }
+   290	        }
+   291	        if(isOperator(i[pos])) {
+   292	            operate(s, i[pos]);
+   293	            pos++;
+   294	        }
+   295	        if(isCommand(i[pos])) {
+   296	            switch(i[pos]) {
+   297	                case 'p': printTop(s); break;
+   298	                case 'n': printAndPopTop(s); break;
+   299	                case 'f': printAll(s); break;
+   300	                case 'c': makeEmpty(s); total = 10; break;
+   301	                case 'd': duplicateTop(s, total); break;
+   302	                case 'r': swapTop(s); break;
+   303	                case 'h': help(); break;
+   304	                case 'e': exit(0);
+   305	                case 'w': cout << "\033[2J\033[1;1H"; break;
+   306	                default: break;
+   307	            }
+   308	            pos++;
+   309	        }
+   310	        try {
+   311	            if(isAnythingElse(i[pos])) throw DataError(2);
+   312	        }
+   313	        catch(DataError& e) {
+   314	            err(e.type, e.explanation);
+   315	            pos++;
+   316	        }
+   317	        try {
+   318	            if(i[pos] == '.') throw DataError(4);
+   319	        }
+   320	        catch(DataError e) {
+   321	            err(e.type, e.explanation);
+   322	            pos++;
+   323	        }
+   324	
+   325	    }
+   326	}
+   327	
+   328	bool isOperator(char o) {
+   329	    return o == '+' || o == '-' || o == '*' || o == '/' || o == '%';
+   330	}
+   331	
+   332	bool isCommand(char c) {
+   333	    return c == 'p' || c == 'n' || c == 'f' || c == 'c' || c == 'd' || c == 'r' || c == 'e' || c == 'h' || c == 'w';
+   334	}
+   335	
+   336	bool isAnythingElse(char r) {
+   337	    return !isdigit(r) && !isCommand(r) && !isOperator(r) && r != '_' && r != ' ' && r != '\0' && r != '.';
+   338	}
+   339	
+   340	string redText(const string &m) {
+   341	    return "\033[0;31;1m" + m + "\033[0m";
+   342	}
+   343	
+   344	string yellowText(const string &m) {
+   345	    return "\033[0;33;1m" + m + "\033[0m";
+   346	}
+   347	
+   348	void err(char t, const string &m) {
+   349	    switch(t) {
+   350	        case 'u':
+   351	            cout << "\a\n" << redText("    Underflow Exception:\n    ") << m << "\n" << endl; break;
+   352	        case 'o':
+   353	            cout << "\a\n" << redText("    Overflow Exception:\n    ") << m << "\n" << endl; break;
+   354	        case 'd':
+   355	            cout << "\a\n" << redText("    Data Error Exception:\n    ") << m << "\n" << endl; break;
+   356	        case 'z':
+   357	            cout << "\a\n" << redText("    Division by Zero Exception:\n    ") << m << "\n" << endl; break;
+   358	        default:
+   359	            cout << "\a\n" << redText("    Exception:\n    ") << m << "\n" << endl; break;
+   360	    }
+   361	}
+   362	
+   363	#pragma clang diagnostic pop]0;corzo_jr@cobra:~/CSC245/Projects/Prog2[corzo_jr@cobra Prog2]$ cat -n dc.cpp exit[Ka.outc++ dc.cpp
+]0;corzo_jr@cobra:~/CSC245/Projects/Prog2[corzo_jr@cobra Prog2]$ c++ dc.cppat -n dc.cpp exit[Ka.out
+[0;32m__2 0.5 +
+[0m[0;32mp
+[0m-1.5
+[0;32m6 - p
+[0m-7.5
+[0;32m4.545 6.2*= +p
+[0m20.679
+[0;32m2/p
+[0m10.3395
+[0;32m4%p
+[0m2.3395
+[0;32m2_100.1+
+[0m[0;32m  2_.4 .5 f
+[0m0.5
+-0.4
+2
+-98.1
+2.3395
+[0;32m5d*p
+[0m25
+[0;32mf
+[0m25
+0.5
+-0.4
+2
+-98.1
+2.3395
+[0;32mrf2pc
+[0m0.5
+25
+-0.4
+2
+-98.1
+2.3395
+2
+[0;32mf
+[0m
+[0;31;1m    Underflow Exception:
+    [0mAn empty stack cannot be printed.
+
+[0;32m0 1 /
+[0m[0;32mf
+[0m0
+[0;32mc
+[0m[0;32m1 0 /
+[0m
+[0;31;1m    Division by Zero Exception:
+    [0mCan't divide a number by zero. Operation skipped.
+
+[0;32m1 2 3 4 5 6 7 8 9 10 11
+[0m
+[0;31;1m    Overflow Exception:
+    [0mStack is full. Doubling size. This is not really
+    an error, just wanted to show you how I handled
+    overflow. The program continues as normal.
+
+[0;32mf
+[0m11
+10
+9
+8
+7
+6
+5
+4
+3
+2
+1
+0
+1
+[0;32mh
+[0m
+The available commands are: 
+[0;33;1mp[0m	 Returns the top of the stack.
+[0;33;1mn[0m	 Prints the top of the stack then pops it.
+[0;33;1mf[0m	 Prints the stack.
+[0;33;1mc[0m	 Clears the stack.
+[0;33;1md[0m	 Pushes the top of the stack unto the stack
+[0;33;1mr[0m	 Swaps the two numbers at the top of the stack.
+[0;33;1mh[0m	 Prints a list of possible commands.
+[0;33;1me[0m	 Quits the program 
+
+[0;32mw
+[0m[2J[1;1H[0;32me
+[0m]0;corzo_jr@cobra:~/CSC245/Projects/Prog2[corzo_jr@cobra Prog2]$ exit
+exit
+
+Script done on Mon 18 Feb 2019 04:33:25 PM EST

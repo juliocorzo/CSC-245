@@ -1,0 +1,6 @@
+ZIP & UNZIP = non-binary, standard compression & uncompression
+              minimum program requirements
+
+c++ -c huffman.cpp
+c++ zip.cpp huffman.o
+c++ unzip.cpp
