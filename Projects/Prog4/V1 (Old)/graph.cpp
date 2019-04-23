@@ -5,56 +5,59 @@ using namespace std;
 const int NULL_EDGE = 0;
 
 template<class VertexType>
-Graph<VertexType>::Graph() {
-
-    /*
-     * Post: Arrays of size 50 are dynamically allocated for marks and vertices.
-     *  numVertices is set to 0; maxVertices is set to 50.
-     */
-
+Graph<VertexType>::Graph()
+// Post: Arrays of size 50 are dynamically allocated for
+//       marks and vertices. numVertices is set to 0;
+//       maxVertices is set to 50.
+{
     numVertices = 0;
     maxVertices = 50;
     ClearMarks();
 }
 
 template<class VertexType>
-bool Graph<VertexType>::IsFull() const {
+bool Graph<VertexType>::IsFull() const
+{
 	return (numVertices == maxVertices);
 }
 
 template<class VertexType>
-bool Graph<VertexType>::IsEmpty() const {
+bool Graph<VertexType>::IsEmpty() const
+{
 	return (numVertices == 0);
 }
 
 template<class VertexType>
-void Graph<VertexType>::ClearMarks() {
-    for (int i = 0; i < maxVertices;  i++) marks[i] = false;
+void Graph<VertexType>::ClearMarks()
+{
+    for (int i = 0; i < maxVertices;  i++)
+		marks[i] = false;
 }
 
 
 template<class VertexType>
-void Graph<VertexType>::MarkVertex(VertexType s) {
+void Graph<VertexType>::MarkVertex(VertexType s)
+{
+	int i = 0;  bool found = false;
 
-    int i = 0;  bool found = false;
-
-	while((i < maxVertices) && (!found)) {
-	    if (vertices[i] == s) {
-	        marks[i] = true;  found = true;
-	    }
-	    i++;
+	while ((i < maxVertices) && (! found))
+	{
+			if (vertices[i] == s)
+	                { 	marks[i] = true;  found = true;  }
+			i++;
 	}
 }	
 
 template<class VertexType>
-bool Graph<VertexType>::IsMarked(VertexType s) const {
+bool Graph<VertexType>::IsMarked(VertexType s) const
+{
+	int i = 0;  bool found = false;
 
-    int i = 0;  bool found = false;
-
-	while ((i < maxVertices)) {
-	    if (vertices[i] == s)
-	        return (marks[i]);
-	    i++;
+	while ((i < maxVertices))
+	{
+			if (vertices[i] == s)
+	                 	return (marks[i]);
+			i++;
 	}
 	return false;
 }
